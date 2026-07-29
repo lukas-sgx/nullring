@@ -7,8 +7,8 @@
   # https://devenv.sh/packages/
   packages = [ 
       pkgs.git
-      nasm
-      nasmfmt
+      pkgs.nasm
+      pkgs.nasmfmt
   ];
 
   # https://devenv.sh/languages/
