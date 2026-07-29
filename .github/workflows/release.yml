@@ -9,6 +9,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    container: lukassgx/nullring
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 

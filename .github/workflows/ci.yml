@@ -15,6 +15,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: lukassgx/nullring
 
     steps:
     - uses: actions/checkout@v6
