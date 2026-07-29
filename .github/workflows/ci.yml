@@ -1,0 +1,83 @@
+name: Nullring OS - CI
+
+on:
+  push:
+    branches-ignore:
+      - "no-ga/**"
+  pull_request:
+    branches-ignore:
+      - "no-ga/**"
+
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: lukassgx/nullring
+
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build
+      run: |
+        make build
+
+  #   - name: Tests
+  #     run: |
+  #       ./tests/tester.sh
+  #     timeout-minutes: 2
+
+  open_pull_request:
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      needs:
+        - build
+      runs-on: ubuntu-latest
+      permissions:
+        pull-requests: write
+        contents: read
+      steps:
+        - uses: actions/checkout@v6
+          with:
+            fetch-depth: 0
+
+        - name: Check diff commits
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            AHEAD_COMMITS=$(gh api repos/${{ github.repository }}/compare/main...develop --jq '.ahead_by')
+
+            if [ "$AHEAD_COMMITS" -eq 0 ]; then
+              exit 0
+            fi
+  
+        - name: Get body content
+          id: pr_body
+          run: |
+            echo "COMMITS_LIST<<EOF" >> $GITHUB_ENV
+            echo "### List of changements: " >> $GITHUB_ENV
+            git log origin/main..HEAD --oneline --pretty=format:"- %s (%h)" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+  
+        - name: Create or Update PR develop -> main
+          run: |
+            BACKLINE=$'\n'
+            COMMITS_LIST="### List of changements:${BACKLINE}"
+            COMMITS_LIST+="$(git log origin/main..HEAD --oneline --pretty=format:"- %s (%h)")"
+
+            gh pr create \
+            --title "merge: ${{ github.ref_name }} -> main" \
+            --body "$COMMITS_LIST" \
+            --base main \
+            --head develop || {
+                PR_NUMBER=$(gh pr list --head developelopelop --base main --json "number" -q '.[0].number')
+        
+                if [ -n "$PR_NUMBER" ]; then
+                    gh pr edit "$PR_NUMBER" --body "$COMMITS_LIST"
+                else
+                    exit 1
+                fi
+            }
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
