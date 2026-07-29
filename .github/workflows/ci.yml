@@ -13,57 +13,24 @@ permissions:
   contents: read
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     image: "lukassgx/arm-gcc"
+  build:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - uses: actions/checkout@v6
-
-  #   - name: Set up Python 3.10
-  #     uses: actions/setup-python@v6
-  #     with:
-  #       python-version: "3.10"
-  #   - name: Install dependencies
-  #     run: |
-  #       source /venv/bin/activate 
-  #       pip install -e "."
-
-  #   - name: Build CMake
-  #     timeout-minutes: 1
-  #     run: |
-  #       source /venv/bin/activate
-  #       cartridge-sdk build -s sandbox
-
-  # functional_test:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     image: "lukassgx/arm-gcc"
-
-  #   steps:
-  #   - uses: actions/checkout@v6
-
-  #   - name: Set up Python 3.10
-  #     uses: actions/setup-python@v6
-  #     with:
-  #       python-version: "3.10"
-  #   - name: Install dependencies
-  #     run: |
-  #       source /venv/bin/activate 
-  #       pip install -e "."
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build
+      run: |
+        make build
 
   #   - name: Tests
   #     run: |
-  #       source /venv/bin/activate
   #       ./tests/tester.sh
   #     timeout-minutes: 2
 
   open_pull_request:
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-      # needs:
-      #   - 
+      needs:
+        - build
       runs-on: ubuntu-latest
       permissions:
         pull-requests: write
