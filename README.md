@@ -5,7 +5,7 @@
 
   <h3 align="center">nullring</h3>
 
-  [![Build Status](https://img.shields.io/github/actions/workflow/status/lukas-sgx/nullring/ci.yml?style=for-the-badge)](https://github.com/lukas-sgx/nullring/actions)
+  [![Release Status](https://img.shields.io/github/actions/workflow/status/lukas-sgx/nullring/release.yml?style=for-the-badge)](https://github.com/lukas-sgx/nullring/actions)
   [![License](https://img.shields.io/github/license/lukas-sgx/nullring?style=for-the-badge)](./LICENSE)
 
   <p align="center">
@@ -66,9 +66,9 @@ To get a local copy up and running, follow these simple steps.
 
 - **Stable** Rust toolchain
   ```sh
-  rustup toolchain install nightly
-  rustup component add rust-src --toolchain nightly
-  rustup component add llvm-tools-preview --toolchain nightly
+  rustup toolchain install stable
+  rustup component add rust-src --toolchain stable
+  rustup component add llvm-tools-preview --toolchain stable
   ```
 - [QEMU](https://www.qemu.org/) (for `qemu-system-x86_64` emulation)
 - `bootimage` (or `limine`, depending on the bootloader used)
