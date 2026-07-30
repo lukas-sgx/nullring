@@ -71,12 +71,12 @@ jobs:
             --body "$COMMITS_LIST" \
             --base main \
             --head develop || {
-                PR_NUMBER=$(gh pr list --head developelopelop --base main --json "number" -q '.[0].number')
+                PR_NUMBER=$(gh pr list --head develop --base main --json "number" -q '.[0].number')
         
                 if [ -n "$PR_NUMBER" ]; then
                     gh pr edit "$PR_NUMBER" --body "$COMMITS_LIST"
                 else
-                    exit 1
+                    exit 0
                 fi
             }
           env:
