@@ -5,7 +5,7 @@
 
   <h3 align="center">nullring</h3>
 
-  [![Release Status](https://img.shields.io/github/actions/workflow/status/lukas-sgx/nullring/release.yml?style=for-the-badge)](https://github.com/lukas-sgx/nullring/actions)
+  [![Build Status](https://img.shields.io/github/actions/workflow/status/lukas-sgx/nullring/ci.yml?style=for-the-badge)](https://github.com/lukas-sgx/nullring/actions)
   [![License](https://img.shields.io/github/license/lukas-sgx/nullring?style=for-the-badge)](./LICENSE)
 
   <p align="center">
